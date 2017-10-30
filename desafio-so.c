@@ -40,11 +40,13 @@ void main () {
                 write(copyOpen, acc, sizeRead);
             } while (sizeRead > 0);
 
-            originSize = lseek(originOpen, 0, SEEK_END);
-            copySize = lseek(originOpen, 0, SEEK_END);
+            originSize = lseek(originOpen, SEEK_SET, SEEK_END);
+            copySize = lseek(copyOpen, SEEK_SET, SEEK_END);
 
             if (originSize == copySize) 
                 write(1, "\nArquivo copiado com sucesso!\n", 30);
+                close(originOpen);
+                close(copyOpen);
             else 
                 write(1, "\nErro ao copiar Arquivo!\n", 30);            
 
@@ -55,8 +57,5 @@ void main () {
     } else {
         write(0, "\nAção inválida: o arquivo não existe!\n", 44);
     }
-
-    close(originOpen);
-    close(copyOpen);
 
 }
