@@ -45,10 +45,11 @@ void main () {
 
             if (originSize == copySize) 
                 write(1, "\nArquivo copiado com sucesso!\n", 30);
-                close(originOpen);
-                close(copyOpen);
             else 
-                write(1, "\nErro ao copiar Arquivo!\n", 30);            
+                write(1, "\nErro ao copiar Arquivo!\n", 30);             
+            
+            close(originOpen);
+            close(copyOpen);
 
         } else {
             write(1, "\nAção inválida: o arquivo ja existe nesta pasta!\n", 30);
