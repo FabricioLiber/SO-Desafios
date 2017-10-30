@@ -53,6 +53,7 @@ void main () {
 
         } else {
             write(1, "\nAção inválida: o arquivo ja existe nesta pasta!\n", 30);
+            close(originOpen);
         }
 
     } else {
