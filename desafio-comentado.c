@@ -2,10 +2,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-///Biblioteca para utilização da System Call Open
+///Biblioteca para utilização da System Call open()
 #include <fcntl.h>
 
-///Biblioteca para utilização da System Calls Lseek e Close
+///Biblioteca para utilização da System Calls lseek(), close(), read() e write()
 #include <unistd.h>
 
 ///Variáveis com valor Constante para facilitar a manutenção do código
