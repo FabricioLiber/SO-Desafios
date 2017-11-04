@@ -43,8 +43,8 @@ int main () {
 
                 // Forma mais simples de verificar a integridade dos dados
         		if (sizeRead != sizeWrote) { 
-        	       write(1, "\nErro ao copiar Arquivo!\n", 30);
-        		   exit(1);
+                    write(1, "\nErro ao copiar Arquivo!\n", 30);
+                    exit(1);
         		}
 
             } while (sizeRead > 0);
