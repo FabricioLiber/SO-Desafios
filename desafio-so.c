@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <stdlib.h>
+
 #include <fcntl.h>
 
 #include <unistd.h>
@@ -8,7 +10,7 @@
 #define TAM_NOME 30
 #define TAM_ACC 50
 
-void main () {
+int main () {
 
 
     char origin[TAM_NOME]; 
@@ -18,7 +20,7 @@ void main () {
     int copyCount, copyOpen, copySize;
 
     char acc[TAM_ACC]; 
-    int sizeRead;
+    int sizeRead, sizeWrote;
 
     write(1, "Digite o nome do arquivo para ser copiado: ", 43);
     originCount = read(0, origin, TAM_NOME);
@@ -37,27 +39,37 @@ void main () {
 
             do {
                 sizeRead = read(originOpen, acc, TAM_ACC);
-                write(copyOpen, acc, sizeRead);
+                sizeWrote = write(copyOpen, acc, sizeRead);
+
+                // Forma mais simples de verificar a integridade dos dados
+        		if (sizeRead != sizeWrote) { 
+        	       write(1, "\nErro ao copiar Arquivo!\n", 30);
+        		   exit(1);
+        		}
+
             } while (sizeRead > 0);
+
+            /* UTILIZANDO O LSEEK PARA VERIFICAR A INTEGRIDADE DOS DADOS
 
             originSize = lseek(originOpen, SEEK_SET, SEEK_END);
             copySize = lseek(copyOpen, SEEK_SET, SEEK_END);
-
             if (originSize == copySize) 
                 write(1, "\nArquivo copiado com sucesso!\n", 30);
             else 
-                write(1, "\nErro ao copiar Arquivo!\n", 30);             
-            
+                write(1, "\nErro ao copiar Arquivo!\n", 30);*/
+
+            write(1, "\nArquivo copiado com sucesso!\n", 30);
             close(originOpen);
             close(copyOpen);
 
         } else {
-            write(1, "\nAção inválida: o arquivo ja existe nesta pasta!\n", 30);
+            write(1, "\nAção inválida: o arquivo ja existe nesta pasta!\n\n", 30);
             close(originOpen);
         }
 
     } else {
         write(0, "\nAção inválida: o arquivo não existe!\n", 44);
     }
-
+	
+    return 0;
 }
