@@ -1,75 +1,66 @@
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#include <stdlib.h>
-
 #include <fcntl.h>
 
 #include <unistd.h>
 
+#include <stdlib.h>
+
 #define TAM_NOME 30
 #define TAM_ACC 50
 
+typedef struct {
+  char name[TAM_NOME];
+  int sizeOperation;
+  int fileOpening;
+} File;
+
 int main () {
 
+    File source;
+    File destiny;
 
-    char origin[TAM_NOME]; 
-    int originCount, originOpen, originSize;
-
-    char copy[TAM_NOME];
-    int copyCount, copyOpen, copySize;
-
-    char acc[TAM_ACC]; 
-    int sizeRead, sizeWrote;
+    char buffer[TAM_ACC];
 
     write(1, "Digite o nome do arquivo para ser copiado: ", 43);
-    originCount = read(0, origin, TAM_NOME);
-    origin[originCount - 1] = '\0';
-    originOpen = open(origin, O_RDONLY);
+    source.sizeOperation = read(0, source.name, TAM_NOME);
+    source.name[source.sizeOperation - 1] = '\0';
+    source.fileOpening = open(source.name, O_RDONLY);
 
-    if (originOpen >= 0){
+    if (source.fileOpening >= 0){
 
         write(1, "\nArquivo aceito!\n\n" , 20);
         write(1, "Digite o nome do arquivo que será a cópia: ", 45);
-        copyCount = read(0, copy, TAM_NOME);
-        copy[copyCount - 1] = '\0';
-        copyOpen = open(copy, O_CREAT | O_EXCL | O_WRONLY, 0777);
+        destiny.sizeOperation = read(0, destiny.name, TAM_NOME);
+        destiny.name[destiny.sizeOperation - 1] = '\0';
+        destiny.fileOpening = open(destiny.name, O_CREAT | O_EXCL | O_WRONLY, 0777);
 
-        if (copyOpen >= 0){
+        if (destiny.fileOpening >= 0){
 
             do {
-                sizeRead = read(originOpen, acc, TAM_ACC);
-                sizeWrote = write(copyOpen, acc, sizeRead);
+                source.sizeOperation = read(source.fileOpening, buffer, TAM_ACC);
+                destiny.sizeOperation = write(destiny.fileOpening, buffer, source.sizeOperation);
 
-                // Forma mais simples de verificar a integridade dos dados
-                if (sizeRead != sizeWrote) { 
+                // Forma simples de verificar a integridade dos dados
+                if (source.sizeOperation != destiny.sizeOperation) {
                     write(1, "\nErro ao copiar Arquivo!\n", 30);
                     exit(1);
                 }
 
-            } while (sizeRead > 0);
-
-            /* UTILIZANDO O LSEEK PARA VERIFICAR A INTEGRIDADE DOS DADOS
-
-            originSize = lseek(originOpen, SEEK_SET, SEEK_END);
-            copySize = lseek(copyOpen, SEEK_SET, SEEK_END);
-            if (originSize == copySize) 
-                write(1, "\nArquivo copiado com sucesso!\n", 30);
-            else 
-                write(1, "\nErro ao copiar Arquivo!\n", 30);*/
+            } while (source.sizeOperation > 0);
 
             write(1, "\nArquivo copiado com sucesso!\n", 30);
-            close(originOpen);
-            close(copyOpen);
+            close(source.fileOpening);
+            close(destiny.fileOpening);
 
         } else {
             write(1, "\nAção inválida: o arquivo ja existe nesta pasta!\n\n", 30);
-            close(originOpen);
+            close(source.fileOpening);
         }
 
     } else {
         write(0, "\nAção inválida: o arquivo não existe!\n", 44);
     }
-	
+
     return 0;
 }
