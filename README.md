@@ -2,4 +2,4 @@
 
 ## Descrição
 
-	Repositório dedicado a exposição dos projetos realizados na disciplina de Sistemas Operacionais.
+Repositório dedicado a exposição dos projetos realizados na disciplina de Sistemas Operacionais.
